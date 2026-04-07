@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Solvra</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="/" class="logo">Solvra</a>
+                <ul class="nav-menu">
+                    <li><a href="/products">Shop All</a></li>
+                    <li><a href="/collections/best-sellers">Best Sellers</a></li>
+                    <li><a href="/faq">FAQ</a></li>
+                </ul>
+                <a href="/cart" class="cart-icon">Cart (<span id="cart-count">0</span>)</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="faq-page">
+        <div class="container">
+            <div class="faq-page-content">
+                <h1>Frequently Asked Questions</h1>
+                <p class="faq-subtitle">Everything you need to know about Solvra</p>
+
+                <div class="faq-list">
+                    {% for faq in faqs %}
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            {{ faq.question }}
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>{{ faq.answer }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            Do you offer subscriptions?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Yes! Subscribe and save 15% on every order. Choose delivery frequency: every 2, 4, or 6 weeks. Cancel or pause anytime from your account.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            Is Solvra coffee organic?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Yes, all our beans are USDA certified organic and sustainably sourced from ethical farms. We're committed to quality and environmental responsibility.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            Can I return opened coffee?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Absolutely. If you're not satisfied with your purchase, contact us within 30 days. We'll make it right with a refund or replacement, no questions asked.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-cta">
+                    <p>Still have questions?</p>
+                    <a href="/contact" class="btn btn-primary">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 Solvra. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleFaq(button) {
+            const answer = button.nextElementSibling;
+            const icon = button.querySelector('.faq-icon');
+            
+            if (answer.classList.contains('active')) {
+                answer.classList.remove('active');
+                icon.textContent = '+';
+            } else {
+                answer.classList.add('active');
+                icon.textContent = '−';
+            }
+        }
+    </script>
+</body>
+</html>

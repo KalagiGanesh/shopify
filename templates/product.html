@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.seo_title }}</title>
+    <meta name="description" content="{{ product.seo_description }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="/" class="logo">Solvra</a>
+                <ul class="nav-menu">
+                    <li><a href="/products">Shop</a></li>
+                    <li><a href="/#science">Our Science</a></li>
+                    <li><a href="/collections/best-sellers">Best Sellers</a></li>
+                    <li><a href="/faq">FAQ</a></li>
+                </ul>
+                <a href="/cart" class="cart-icon">
+                    Cart (<span id="cart-count">0</span>)
+                </a>
+                <button class="mobile-menu-toggle" aria-label="Toggle menu">☰</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumbs -->
+    <div class="container" style="padding: 2rem 0;">
+        <div class="breadcrumbs">
+            <a href="/">Home</a> / <a href="/products">Products</a> / {{ product.name }}
+        </div>
+    </div>
+
+    <!-- Product Detail -->
+    {% if product %}
+    <section class="product-detail">
+        <div class="container">
+            <div class="product-detail-grid">
+                <div class="product-detail-image">
+                    {% if product.badges %}
+                    <div class="product-badges">
+                        {% for badge in product.badges %}
+                        <span class="badge">{{ badge }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    <img src="{{ product.image }}" alt="{{ product.name }}">
+                </div>
+                <div class="product-detail-content">
+                    <span class="product-vendor">{{ product.vendor }}</span>
+                    <h1>{{ product.name }}</h1>
+                    
+                    <!-- Review Stars -->
+                    <div class="product-rating-large">
+                        <span class="stars">★★★★★</span>
+                        <span class="rating-text">{{ product.rating }} ({{ product.review_count }} reviews)</span>
+                    </div>
+
+                    <div class="product-detail-price">
+                        <span class="current-price">${{ "%.2f"|format(product.price) }}</span>
+                        {% if product.compare_at_price %}
+                        <span class="original-price">${{ "%.2f"|format(product.compare_at_price) }}</span>
+                        <span class="discount-badge">Save {{ ((product.compare_at_price - product.price) / product.compare_at_price * 100)|round|int }}%</span>
+                        {% endif %}
+                    </div>
+
+                    <p class="product-description">{{ product.description }}</p>
+
+                    <!-- Variant Selectors -->
+                    <div class="variant-selectors">
+                        <!-- Grind Option -->
+                        <div class="variant-option">
+                            <label class="variant-label">
+                                <span>Grind Type</span>
+                            </label>
+                            <div class="variant-options" id="grind-options">
+                                <button class="variant-btn active" data-grind="whole-bean" onclick="selectGrind(this)">Whole Bean</button>
+                                <button class="variant-btn" data-grind="universal" onclick="selectGrind(this)">Universal Grind</button>
+                                <button class="variant-btn" data-grind="espresso" onclick="selectGrind(this)">Espresso</button>
+                            </div>
+                        </div>
+
+                        <!-- Size Option -->
+                        <div class="variant-option">
+                            <label class="variant-label">
+                                <span>Size</span>
+                            </label>
+                            <div class="variant-options" id="size-options">
+                                <button class="variant-btn active" data-size="12oz" data-price-modifier="0" onclick="selectSize(this)">12oz Bag</button>
+                                <button class="variant-btn" data-size="2lb" data-price-modifier="15" onclick="selectSize(this)">2lb Bag (+$15.00)</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Subscription Option -->
+                    <div class="subscription-option">
+                        <div class="subscription-choice">
+                            <input type="radio" name="purchase_type" id="one-time" value="one-time" checked>
+                            <label for="one-time">
+                                <strong>One-time purchase</strong>
+                                <span>${{ "%.2f"|format(product.price) }}</span>
+                            </label>
+                        </div>
+                        <div class="subscription-choice">
+                            <input type="radio" name="purchase_type" id="subscribe" value="subscribe">
+                            <label for="subscribe">
+                                <strong>✨ Subscribe & Save 15%</strong>
+                                <span>${{ "%.2f"|format(product.price * 0.85) }}</span>
+                                <small>Delivered every 30 days. Cancel anytime.</small>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Add to Cart -->
+                    <div class="product-actions">
+                        <div class="quantity-selector">
+                            <button class="qty-btn" onclick="updateQty(-1)">−</button>
+                            <input type="number" id="quantity" value="1" min="1" max="10">
+                            <button class="qty-btn" onclick="updateQty(1)">+</button>
+                        </div>
+                        <button class="btn btn-primary btn-large" id="add-to-cart-btn" onclick="addToCartWithVariants()">
+                            Add to Cart - <span id="dynamic-price">${{ "%.2f"|format(product.price) }}</span>
+                        </button>
+                    </div>
+
+                    <!-- Trust Microcopy -->
+                    <p class="trust-microcopy">🔒 Secure checkout • 🚚 Fast shipping • 🔄 Easy returns</p>
+
+                    <!-- Trust Badges Below CTA -->
+                    <div class="product-trust-badges">
+                        <div class="trust-badge-item">
+                            <span>🚚</span>
+                            <p>Free shipping over $50</p>
+                        </div>
+                        <div class="trust-badge-item">
+                            <span>🔄</span>
+                            <p>30-day returns</p>
+                        </div>
+                        <div class="trust-badge-item">
+                            <span>🛡️</span>
+                            <p>Secure checkout</p>
+                        </div>
+                    </div>
+
+                    <!-- Product Tags -->
+                    <div class="product-tags">
+                        <strong>Tags:</strong>
+                        {% for tag in product.tags %}
+                        <span class="tag">{{ tag|title }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Use Section -->
+    <section class="how-to-use-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Simple Ritual</span>
+                <h2 class="section-title">How to use {{ product.name }}</h2>
+            </div>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">01</div>
+                    <div class="step-image">
+                        <img src="https://images.unsplash.com/photo-1511537632536-b7a575805d75?w=400&q=80" alt="Add coffee">
+                    </div>
+                    <h3>Add 1 Scoop</h3>
+                    <p>Measure one tablespoon (12g) into your favorite brewing device.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">02</div>
+                    <div class="step-image">
+                        <img src="https://images.unsplash.com/photo-1518057111178-44a106bad636?w=400&q=80" alt="Brew">
+                    </div>
+                    <h3>Brew with Hot Water</h3>
+                    <p>Use 200°F water. Brew for 3-4 minutes for optimal extraction.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">03</div>
+                    <div class="step-image">
+                        <img src="https://images.unsplash.com/photo-1504630083234-14187a9df0f5?w=400&q=80" alt="Enjoy">
+                    </div>
+                    <h3>Enjoy Steady Focus</h3>
+                    <p>Feel the smooth energy build over 20-30 minutes. Stay focused for hours.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ingredients / Benefits Grid -->
+    <section class="benefits-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Why It Works</span>
+                <h2 class="section-title">Benefits you'll feel</h2>
+            </div>
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <div class="benefit-icon">🎯</div>
+                    <h4>Focus Support</h4>
+                    <p>L-theanine promotes alpha brain waves for calm alertness</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">⚡</div>
+                    <h4>Calm Energy</h4>
+                    <p>No jitters, no crashes. Just sustained focus for 4-6 hours</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🧠</div>
+                    <h4>Cognitive Boost</h4>
+                    <p>Lion's mane mushroom supports memory and mental clarity</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">☕</div>
+                    <h4>Clean Taste</h4>
+                    <p>Smooth medium roast with zero artificial additives</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="product-faq-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Questions?</span>
+                <h2 class="section-title">Frequently Asked Questions</h2>
+            </div>
+            <div class="faq-list">
+                {% for faq in faqs %}
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        {{ faq.question }}
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>{{ faq.answer }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section class="reviews-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Reviews</span>
+                <h2 class="section-title">What customers say</h2>
+            </div>
+            <div class="reviews-summary">
+                <div class="reviews-average">
+                    <div class="average-rating">{{ product.rating }}</div>
+                    <div class="average-stars">★★★★★</div>
+                    <div class="average-count">Based on {{ product.review_count }} reviews</div>
+                </div>
+            </div>
+            <div class="reviews-placeholder">
+                <p>⭐⭐⭐⭐⭐ "Game changer for my morning routine! Clean energy without jitters." - Verified Buyer</p>
+                <p>⭐⭐⭐⭐⭐ "Best coffee I've ever had for focus. Stays smooth all day." - Verified Buyer</p>
+                <p>⭐⭐⭐⭐⭐ "Finally, coffee that doesn't make me crash. Love it!" - Verified Buyer</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Related Products -->
+    {% if related %}
+    <section class="featured-products">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">You May Also Like</span>
+                <h2 class="section-title">Complete your ritual</h2>
+            </div>
+            <div class="products-grid">
+                {% for item in related %}
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="{{ item.image }}" alt="{{ item.name }}">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="rating-text">{{ item.rating }} ({{ item.review_count }})</span>
+                        </div>
+                        <h3>{{ item.name }}</h3>
+                        <div class="product-price">
+                            <span class="current-price">${{ "%.2f"|format(item.price) }}</span>
+                            {% if item.compare_at_price %}
+                            <span class="original-price">${{ "%.2f"|format(item.compare_at_price) }}</span>
+                            {% endif %}
+                        </div>
+                        <a href="/product/{{ item.handle }}" class="btn btn-primary">View Product</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    {% else %}
+    <section style="padding: 8rem 0; text-align: center; min-height: 70vh;">
+        <div class="container">
+            <h1 style="font-size: 3rem; margin-bottom: 1rem;">Product Not Found</h1>
+            <p style="font-size: 1.1rem; color: #666; margin-bottom: 2rem;">The product you're looking for doesn't exist.</p>
+            <a href="/products" class="btn btn-primary btn-large">Browse All Products</a>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <h3 class="footer-logo">Solvra</h3>
+                    <p class="footer-brand-text">Premium functional coffee crafted for deep work, sustained energy, and clean focus. Join the ritual.</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link">Instagram</a>
+                        <a href="#" class="social-link">Twitter</a>
+                        <a href="#" class="social-link">TikTok</a>
+                    </div>
+                </div>
+                <div class="footer-grid">
+                    <div class="footer-col">
+                        <h4>Shop</h4>
+                        <ul>
+                            <li><a href="/products">All Products</a></li>
+                            <li><a href="/collections/best-sellers">Best Sellers</a></li>
+                            <li><a href="/products">Functional Coffee</a></li>
+                            <li><a href="/products">Accessories</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Company</h4>
+                        <ul>
+                            <li><a href="/">About Solvra</a></li>
+                            <li><a href="/">Our Story</a></li>
+                            <li><a href="/">Ingredients</a></li>
+                            <li><a href="/">Sustainability</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Support</h4>
+                        <ul>
+                            <li><a href="/faq">FAQ</a></li>
+                            <li><a href="/shipping-returns">Shipping & Returns</a></li>
+                            <li><a href="/contact">Contact Us</a></li>
+                            <li><a href="/privacy-policy">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Contact</h4>
+                        <ul>
+                            <li><a href="mailto:hello@solvra.com">hello@solvra.com</a></li>
+                            <li>Mon-Fri, 9am-6pm EST</li>
+                            <li><a href="/contact">Send a Message</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Solvra. All rights reserved. | Functional Coffee for Deep Focus</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Sticky Add to Cart (Mobile) -->
+    <div class="sticky-add-to-cart" id="stickyCart">
+        <div class="container">
+            <div class="sticky-content">
+                <div class="sticky-info">
+                    <h4>{{ product.name }}</h4>
+                    <span class="sticky-price">${{ "%.2f"|format(product.price) }}</span>
+                </div>
+                <button class="btn btn-primary" onclick="addToCart({{ product.id }}, '{{ product.name }}', {{ product.price }})">
+                    Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/script.js"></script>
+    <script>
+        // Variant Selection
+        let selectedGrind = 'whole-bean';
+        let selectedSize = '12oz';
+        let sizePriceModifier = 0;
+        const basePrice = {{ product.price }};
+
+        function selectGrind(btn) {
+            document.querySelectorAll('#grind-options .variant-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedGrind = btn.dataset.grind;
+        }
+
+        function selectSize(btn) {
+            document.querySelectorAll('#size-options .variant-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedSize = btn.dataset.size;
+            sizePriceModifier = parseFloat(btn.dataset.priceModifier);
+            updateDynamicPrice();
+        }
+
+        function updateDynamicPrice() {
+            const isSubscribe = document.getElementById('subscribe').checked;
+            let price = basePrice + sizePriceModifier;
+            
+            if (isSubscribe) {
+                price = price * 0.85; // 15% discount
+            }
+            
+            document.getElementById('dynamic-price').textContent = '$' + price.toFixed(2);
+            document.querySelector('.sticky-price').textContent = '$' + price.toFixed(2);
+        }
+
+        // Add to Cart with Variants
+        function addToCartWithVariants() {
+            const qty = parseInt(document.getElementById('quantity').value);
+            const isSubscribe = document.getElementById('subscribe').checked;
+            const purchaseType = isSubscribe ? 'Subscribe & Save 15%' : 'One-time';
+            
+            const productName = `${{ product.name|tojson }} - ${selectedGrind} / ${selectedSize} (${purchaseType})`;
+            let price = basePrice + sizePriceModifier;
+            
+            if (isSubscribe) {
+                price = price * 0.85;
+            }
+            
+            addToCart({{ product.id }}, productName, price, '{{ product.image }}', qty);
+        }
+
+        // Listen for subscription changes
+        document.querySelectorAll('input[name="purchase_type"]').forEach(radio => {
+            radio.addEventListener('change', updateDynamicPrice);
+        });
+
+        // FAQ Toggle
+        function toggleFaq(button) {
+            const answer = button.nextElementSibling;
+            const icon = button.querySelector('.faq-icon');
+            
+            if (answer.classList.contains('active')) {
+                answer.classList.remove('active');
+                icon.textContent = '+';
+            } else {
+                answer.classList.add('active');
+                icon.textContent = '−';
+            }
+        }
+
+        // Quantity Update
+        function updateQty(change) {
+            const qtyInput = document.getElementById('quantity');
+            let qty = parseInt(qtyInput.value) + change;
+            if (qty >= 1 && qty <= 10) {
+                qtyInput.value = qty;
+            }
+        }
+
+        // Show sticky cart on scroll (both mobile and desktop)
+        window.addEventListener('scroll', function() {
+            const stickyCart = document.getElementById('stickyCart');
+            if (window.scrollY > 500) {
+                stickyCart.classList.add('visible');
+            } else {
+                stickyCart.classList.remove('visible');
+            }
+        });
+
+        // Initialize price
+        updateDynamicPrice();
+    </script>
+</body>
+</html>

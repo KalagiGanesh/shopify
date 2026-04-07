@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Your Order - Solvra</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="/" class="logo">Solvra</a>
+                <ul class="nav-menu">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/products">Shop</a></li>
+                    <li><a href="/collections/best-sellers">Collections</a></li>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/faq">FAQ</a></li>
+                </ul>
+                <a href="/cart" class="cart-icon">Cart (<span id="cart-count">0</span>)</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="page-hero">
+        <div class="container">
+            <h1>Track Your Order</h1>
+            <p class="page-subtitle">Looking for your shipment? We've got you covered.</p>
+        </div>
+    </section>
+
+    <section class="content-page">
+        <div class="container">
+            <div class="page-content">
+                <h2>How to Track Your Package</h2>
+                <p>Once your order ships, you will receive an email confirmation with a tracking number and link to track your package in real-time.</p>
+
+                <div class="track-order-form">
+                    <h3>Enter Your Order Details</h3>
+                    <form onsubmit="trackOrder(event)">
+                        <div class="form-group">
+                            <label for="order-number">Order Number</label>
+                            <input type="text" id="order-number" placeholder="e.g., #SLV-12345" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="order-email">Email Address</label>
+                            <input type="email" id="order-email" placeholder="Your order email" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-large">Track Order</button>
+                    </form>
+                    <div id="tracking-result" style="margin-top: 20px;"></div>
+                </div>
+
+                <h2>Shipping Information</h2>
+                <ul>
+                    <li><strong>Processing Time:</strong> All orders are processed within 24 hours</li>
+                    <li><strong>Standard Shipping:</strong> 3-5 business days ($5.99 or FREE on orders over $50)</li>
+                    <li><strong>Expedited Shipping:</strong> 1-2 business days ($12.99)</li>
+                    <li><strong>Carriers:</strong> We ship via carbon-neutral carriers</li>
+                </ul>
+
+                <h2>Need Help?</h2>
+                <p>If you haven't received your tracking email within 48 hours of placing your order, or if you have any questions, please contact us:</p>
+                <ul>
+                    <li>Email: <a href="mailto:hello@solvra.com">hello@solvra.com</a></li>
+                    <li>Hours: Mon-Fri, 9am-6pm EST</li>
+                    <li><a href="/contact">Contact Form</a></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 Solvra. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/static/js/script.js"></script>
+    <script>
+        function trackOrder(event) {
+            event.preventDefault();
+            const orderNumber = document.getElementById('order-number').value;
+            const resultDiv = document.getElementById('tracking-result');
+            
+            resultDiv.innerHTML = `
+                <div style="padding: 20px; background: #f0fdf4; border-left: 4px solid #2d6a4f; border-radius: 8px;">
+                    <h4 style="color: #2d6a4f; margin-bottom: 10px;">📦 Order Status: In Transit</h4>
+                    <p><strong>Order:</strong> ${orderNumber}</p>
+                    <p><strong>Status:</strong> Your order is on its way!</p>
+                    <p><strong>Estimated Delivery:</strong> 3-5 business days</p>
+                    <p style="margin-top: 10px; font-size: 0.9em; color: #666;">
+                        Note: This is a demo. In production, this would connect to your shipping carrier's API.
+                    </p>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

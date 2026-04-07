@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found - Solvra</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="/" class="logo">Solvra</a>
+                <ul class="nav-menu">
+                    <li><a href="/products">Shop All</a></li>
+                    <li><a href="/collections/best-sellers">Best Sellers</a></li>
+                    <li><a href="/faq">FAQ</a></li>
+                </ul>
+                <a href="/cart" class="cart-icon">Cart (<span id="cart-count">0</span>)</a>
+            </div>
+        </div>
+    </nav>
+
+    <section style="padding: 8rem 0; text-align: center; min-height: 70vh; display: flex; align-items: center; justify-content: center;">
+        <div class="container">
+            <h1 style="font-size: 6rem; margin-bottom: 1rem;">404</h1>
+            <h2 style="font-size: 2rem; margin-bottom: 1rem;">{{ message or 'Page Not Found' }}</h2>
+            <p style="font-size: 1.1rem; color: #666; margin-bottom: 2rem;">The product you're looking for doesn't exist or has been moved.</p>
+            <div style="display: flex; gap: 1rem; justify-content: center;">
+                <a href="/products" class="btn btn-primary btn-large">Browse All Products</a>
+                <a href="/" class="btn btn-outline btn-large">Back to Home</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 Solvra. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

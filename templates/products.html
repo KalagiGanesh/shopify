@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Products - Solvra</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">Solvra</a>
+            <ul class="nav-menu">
+                <li><a href="/">Home</a></li>
+                <li><a href="/products">Products</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Products Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>All Products</h1>
+            <p>Discover our complete collection of functional coffee and accessories</p>
+        </div>
+    </section>
+
+    <!-- Products Grid -->
+    <section class="products-section">
+        <div class="container">
+            <div class="product-grid">
+                {% for product in products %}
+                <div class="product-card">
+                    <a href="/product/{{ product.handle }}">
+                        <div class="product-image">
+                            <img src="{{ product.image }}" alt="{{ product.name }}">
+                        </div>
+                        <h3 class="product-name">{{ product.name }}</h3>
+                        <p class="product-category">{{ product.category }}</p>
+                        <p class="product-price">${{ "%.2f"|format(product.price) }}</p>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Shop</h4>
+                    <ul>
+                        <li><a href="/products">Functional Coffee</a></li>
+                        <li><a href="/products">Starter Kits</a></li>
+                        <li><a href="/products">Accessories</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="/">About Solvra</a></li>
+                        <li><a href="/">Our Story</a></li>
+                        <li><a href="/">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="/">FAQs</a></li>
+                        <li><a href="/">Shipping & Returns</a></li>
+                        <li><a href="/">Track Order</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Connect</h4>
+                    <ul>
+                        <li><a href="/">Instagram</a></li>
+                        <li><a href="/">Twitter</a></li>
+                        <li><a href="/">Facebook</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Solvra. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

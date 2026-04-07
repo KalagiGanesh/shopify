@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solvra – Functional Coffee for Deep Focus</title>
+    <meta name="description" content="Premium functional coffee blends designed for sustained focus, clean energy, and deep work rituals.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="/" class="logo">Solvra</a>
+                <ul class="nav-menu">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/products">Shop</a></li>
+                    <li><a href="/collections/best-sellers">Collections</a></li>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/faq">FAQ</a></li>
+                </ul>
+                <a href="/cart" class="cart-icon">
+                    Cart (<span id="cart-count">0</span>)
+                </a>
+                <button class="mobile-menu-toggle" aria-label="Toggle menu" onclick="toggleMobileMenu()">☰</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 1. Hero Banner - Premium Layout -->
+    <section class="hero-premium">
+        <div class="container">
+            <div class="hero-grid">
+                <div class="hero-content">
+                    <h1 class="hero-heading">Focus starts<br>smoother here.</h1>
+                    <p class="hero-subtitle">Functional coffee crafted for clear thinking and steady energy. No jitters. No crashes. Just clean, sustained focus.</p>
+                    <div class="hero-ctas">
+                        <a href="/collections/best-sellers" class="btn btn-primary btn-large">Shop Best Sellers</a>
+                        <a href="/product/solvra-starter-kit" class="btn btn-outline btn-large">Start With the Kit</a>
+                    </div>
+                    <div class="hero-trust-line">
+                        <span>✓ Ships fast</span>
+                        <span>✓ Secure checkout</span>
+                        <span>✓ Support that replies</span>
+                    </div>
+                </div>
+                <div class="hero-image-wrapper">
+                    <div class="hero-image-container">
+                        <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=800&q=80" alt="Solvra Focus Coffee" class="hero-image">
+                        <div class="hero-image-overlay"></div>
+                    </div>
+                    <div class="hero-badge-float">
+                        <div class="badge-icon">⭐</div>
+                        <div class="badge-text">
+                            <strong>4.9/5</strong>
+                            <span>From 800+ reviews</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Featured Collections -->
+    <section class="featured-collections">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Shop by Goal</span>
+                <h2 class="section-title">Find your perfect blend</h2>
+            </div>
+            <div class="collections-grid">
+                <a href="/collections/best-sellers" class="collection-card">
+                    <div class="collection-image">
+                        <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80" alt="Best Sellers">
+                    </div>
+                    <div class="collection-badge">Most Popular</div>
+                    <div class="collection-content">
+                        <h3>Best Sellers</h3>
+                        <p>Our most-loved blends for peak performance</p>
+                        <span class="collection-link">Shop Now →</span>
+                    </div>
+                </a>
+                <a href="/products" class="collection-card">
+                    <div class="collection-image">
+                        <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=600&q=80" alt="Functional Coffee">
+                    </div>
+                    <div class="collection-badge">New Arrivals</div>
+                    <div class="collection-content">
+                        <h3>Functional Coffee</h3>
+                        <p>Adaptogen-infused roasts for focus & energy</p>
+                        <span class="collection-link">Explore →</span>
+                    </div>
+                </a>
+                <a href="/product/solvra-starter-kit" class="collection-card">
+                    <div class="collection-image">
+                        <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=80" alt="Starter Kits">
+                    </div>
+                    <div class="collection-badge">Save 27%</div>
+                    <div class="collection-content">
+                        <h3>Starter Kits</h3>
+                        <p>Complete collections for the perfect introduction</p>
+                        <span class="collection-link">Get Started →</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Best Sellers -->
+    <section class="featured-products">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Community Favorites</span>
+                <h2 class="section-title">Best Sellers</h2>
+            </div>
+            <div class="products-grid">
+                {% for product in products %}
+                <div class="product-card">
+                    {% if product.badges %}
+                    <div class="product-badges">
+                        {% for badge in product.badges %}
+                        <span class="badge">{{ badge }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    <div class="product-image">
+                        <img src="{{ product.image }}" alt="{{ product.name }}">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="rating-text">{{ product.rating }} ({{ product.review_count }})</span>
+                        </div>
+                        <h3>{{ product.name }}</h3>
+                        <div class="product-price">
+                            <span class="current-price">${{ "%.2f"|format(product.price) }}</span>
+                            {% if product.compare_at_price %}
+                            <span class="original-price">${{ "%.2f"|format(product.compare_at_price) }}</span>
+                            {% endif %}
+                        </div>
+                        <a href="/product/{{ product.handle }}" class="btn btn-primary">View Product</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="section-cta">
+                <a href="/products" class="btn btn-secondary">View All Products</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW: Our Science Section -->
+    <section id="science" class="science-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">The Science</span>
+                <h2 class="section-title">Why Solvra feels different</h2>
+                <p class="section-subtitle">We blend functional ingredients with premium coffee to deliver sustained focus without the crash.</p>
+            </div>
+            <div class="science-grid">
+                <div class="science-card">
+                    <div class="science-icon">🧠</div>
+                    <h3>Adaptogens for Focus</h3>
+                    <p>Lion's mane and L-theanine work synergistically to enhance cognitive function and promote alpha brain waves for calm alertness.</p>
+                    <ul class="science-features">
+                        <li>✓ Enhanced mental clarity</li>
+                        <li>✓ Improved memory retention</li>
+                        <li>✓ Sustained concentration</li>
+                    </ul>
+                </div>
+                <div class="science-card highlight">
+                    <div class="science-icon">⚡</div>
+                    <h3>Smooth Energy Curve</h3>
+                    <p>Unlike regular coffee's spike-and-crash pattern, Solvra's blend delivers a gradual energy release that lasts 4-6 hours.</p>
+                    <div class="energy-comparison">
+                        <div class="energy-line regular">
+                            <span>Regular Coffee</span>
+                            <div class="energy-bar">Spike → Crash</div>
+                        </div>
+                        <div class="energy-line solvra">
+                            <span>Solvra</span>
+                            <div class="energy-bar">Smooth → Sustained</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="science-card">
+                    <div class="science-icon">🌱</div>
+                    <h3>Clean Ingredients</h3>
+                    <p>Zero artificial additives, sweeteners, or fillers. Just premium organic coffee and naturally-sourced functional mushrooms.</p>
+                    <ul class="science-features">
+                        <li>✓ USDA Organic certified</li>
+                        <li>✓ Third-party lab tested</li>
+                        <li>✓ Transparent sourcing</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. USP Section -->
+    <section class="usp-section">
+        <div class="container">
+            <div class="usp-grid">
+                <div class="usp-item">
+                    <div class="usp-icon">⚡</div>
+                    <h4>Steadier Energy</h4>
+                    <p>No jitters. No crashes. Just smooth, sustained focus for hours.</p>
+                </div>
+                <div class="usp-item">
+                    <div class="usp-icon">☕</div>
+                    <h4>Refined Flavor</h4>
+                    <p>Single-origin beans, small-batch roasted for exceptional taste.</p>
+                </div>
+                <div class="usp-item">
+                    <div class="usp-icon">🎯</div>
+                    <h4>Built for Focus</h4>
+                    <p>Adaptogens + L-theanine for deep work and creative flow.</p>
+                </div>
+                <div class="usp-item">
+                    <div class="usp-icon">🚀</div>
+                    <h4>Fast Fulfillment</h4>
+                    <p>Ships within 24 hours. Free delivery on orders over $50.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Product Highlight - Asymmetric Layout -->
+    <section class="product-highlight">
+        <div class="container">
+            <div class="highlight-grid">
+                <div class="highlight-image">
+                    <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=800&q=80" alt="Solvra Focus Roast">
+                    <div class="highlight-badges">
+                        <span class="highlight-badge">Best Seller</span>
+                        <span class="highlight-badge">21% Off</span>
+                    </div>
+                </div>
+                <div class="highlight-content">
+                    <span class="highlight-label">Featured Product</span>
+                    <h2>Solvra Focus Roast</h2>
+                    <p class="highlight-description">
+                        Our signature blend combines premium Colombian beans with L-theanine and lion's mane mushroom. 
+                        The result? Laser-sharp focus, sustained energy, and zero afternoon crashes.
+                    </p>
+                    
+                    <!-- Ingredients/Benefits Grid -->
+                    <div class="benefits-grid">
+                        <div class="benefit-item">
+                            <div class="benefit-icon">🎯</div>
+                            <h4>Focus Support</h4>
+                            <p>100mg L-theanine per serving</p>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">⚡</div>
+                            <h4>Calm Energy</h4>
+                            <p>No jitters, no crashes</p>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">🧠</div>
+                            <h4>Cognitive Boost</h4>
+                            <p>Lion's mane mushroom</p>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">☕</div>
+                            <h4>Clean Taste</h4>
+                            <p>Smooth medium roast</p>
+                        </div>
+                    </div>
+
+                    <div class="highlight-price">
+                        <span class="current-price">$34.99</span>
+                        <span class="original-price">$44.99</span>
+                        <span class="discount-badge">Save 21%</span>
+                    </div>
+                    <a href="/product/solvra-focus-roast" class="btn btn-primary btn-large">Shop Focus Roast</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW: How to Use Section -->
+    <section class="how-to-use-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Simple Ritual</span>
+                <h2 class="section-title">How to use Solvra</h2>
+            </div>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">01</div>
+                    <div class="step-image">
+                        <img src="https://images.unsplash.com/photo-1511537632536-b7a575805d75?w=400&q=80" alt="Add coffee">
+                    </div>
+                    <h3>Add 1 Scoop</h3>
+                    <p>Measure one tablespoon (12g) of Solvra into your favorite brewing device.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">02</div>
+                    <div class="step-image">
+                        <img src="https://images.unsplash.com/photo-1518057111178-44a106bad636?w=400&q=80" alt="Brew">
+                    </div>
+                    <h3>Brew with Hot Water</h3>
+                    <p>Use 200°F water. Brew for 3-4 minutes for optimal extraction and flavor.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">03</div>
+                    <div class="step-image">
+                        <img src="https://images.unsplash.com/photo-1504630083234-14187a9df0f5?w=400&q=80" alt="Enjoy">
+                    </div>
+                    <h3>Enjoy Steady Focus</h3>
+                    <p>Sip slowly. Feel the smooth energy build over 20-30 minutes. Stay focused for hours.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Testimonials - Enhanced -->
+    <section class="testimonials-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Real Stories</span>
+                <h2 class="section-title">What Our Community Says</h2>
+                <p class="section-subtitle">Join 800+ professionals who've upgraded their morning ritual.</p>
+            </div>
+            <div class="testimonials-grid">
+                {% for testimonial in testimonials %}
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" alt="{{ testimonial.name }}">
+                        </div>
+                        <div class="testimonial-meta">
+                            <div class="testimonial-rating">★★★★★</div>
+                            <div class="author-name">{{ testimonial.name }}</div>
+                            <div class="author-role">{{ testimonial.role }}</div>
+                        </div>
+                    </div>
+                    <p class="testimonial-text">"{{ testimonial.text }}"</p>
+                    <div class="testimonial-verified">✓ Verified Purchase</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW: As Seen In / Trust Section -->
+    <section class="as-seen-section">
+        <div class="container">
+            <p class="as-seen-label">As featured in</p>
+            <div class="logo-grid">
+                <div class="logo-placeholder">Forbes</div>
+                <div class="logo-placeholder">GQ</div>
+                <div class="logo-placeholder">Men's Health</div>
+                <div class="logo-placeholder">Well+Good</div>
+                <div class="logo-placeholder">MindBodyGreen</div>
+            </div>
+            <div class="trust-badges-horizontal">
+                <div class="trust-badge">
+                    <span>🧪</span>
+                    <div>
+                        <strong>Lab Tested</strong>
+                        <p>Every batch verified</p>
+                    </div>
+                </div>
+                <div class="trust-badge">
+                    <span>🌱</span>
+                    <div>
+                        <strong>Clean Ingredients</strong>
+                        <p>No artificial additives</p>
+                    </div>
+                </div>
+                <div class="trust-badge">
+                    <span>📦</span>
+                    <div>
+                        <strong>Fast Shipping</strong>
+                        <p>24hr fulfillment</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Trust Badges -->
+    <section class="trust-section">
+        <div class="container">
+            <div class="trust-grid">
+                <div class="trust-item">
+                    <h4>🌱 Organic Beans</h4>
+                    <p>USDA certified organic, sustainably sourced</p>
+                </div>
+                <div class="trust-item">
+                    <h4>🧪 Lab Tested</h4>
+                    <p>Every batch tested for purity and potency</p>
+                </div>
+                <div class="trust-item">
+                    <h4>📦 Free Shipping</h4>
+                    <p>Free delivery on all orders over $50</p>
+                </div>
+                <div class="trust-item">
+                    <h4>💯 Satisfaction Guarantee</h4>
+                    <p>Love it or your money back, no questions</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. Newsletter -->
+    <section class="newsletter">
+        <div class="container">
+            <div class="newsletter-content">
+                <h2>Join the Solvra ritual</h2>
+                <p>Get 10% off your first order and early access to new drops</p>
+                <form class="newsletter-form" onsubmit="handleNewsletter(event)">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit" class="btn btn-primary">Subscribe</button>
+                </form>
+                <p class="newsletter-note">No spam. Unsubscribe anytime. We respect your privacy.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. Footer - Expanded -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <h3 class="footer-logo">Solvra</h3>
+                    <p class="footer-brand-text">Premium functional coffee crafted for deep work, sustained energy, and clean focus. Join the ritual.</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link">Instagram</a>
+                        <a href="#" class="social-link">Twitter</a>
+                        <a href="#" class="social-link">TikTok</a>
+                    </div>
+                </div>
+                <div class="footer-grid">
+                    <div class="footer-col">
+                        <h4>Shop</h4>
+                        <ul>
+                            <li><a href="/products">All Products</a></li>
+                            <li><a href="/collections/best-sellers">Best Sellers</a></li>
+                            <li><a href="/products">Functional Coffee</a></li>
+                            <li><a href="/products">Accessories</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Company</h4>
+                        <ul>
+                            <li><a href="/about">About Solvra</a></li>
+                            <li><a href="/about">Our Story</a></li>
+                            <li><a href="/about">Ingredients</a></li>
+                            <li><a href="/about">Sustainability</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Support</h4>
+                        <ul>
+                            <li><a href="/faq">FAQ</a></li>
+                            <li><a href="/shipping-returns">Shipping & Returns</a></li>
+                            <li><a href="/contact">Contact Us</a></li>
+                            <li><a href="/track-order">Track Order</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Legal</h4>
+                        <ul>
+                            <li><a href="/privacy-policy">Privacy Policy</a></li>
+                            <li><a href="/terms-of-service">Terms of Service</a></li>
+                            <li><a href="/shipping-returns">Returns Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Solvra. All rights reserved. | Functional Coffee for Deep Focus</p>
+                <div class="payment-icons">
+                    <span class="payment-icon">💳 Visa</span>
+                    <span class="payment-icon">💳 Mastercard</span>
+                    <span class="payment-icon">💳 Amex</span>
+                    <span class="payment-icon">🔒 ShopPay</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Drawer -->
+    <div class="cart-drawer-overlay" id="cart-drawer-overlay" onclick="closeCartDrawer()"></div>
+    <div class="cart-drawer" id="cart-drawer">
+        <div class="cart-drawer-header">
+            <h3>Your Cart</h3>
+            <button class="cart-drawer-close" onclick="closeCartDrawer()">×</button>
+        </div>
+        
+        <!-- Free Shipping Bar -->
+        <div id="free-shipping-progress" class="free-shipping-bar" style="display: block;">
+            <p>🚚 You're <strong>$50.00</strong> away from FREE shipping!</p>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <div id="drawer-items" class="cart-drawer-items">
+            <div class="drawer-empty">
+                <p>Your cart is empty</p>
+                <a href="/products" class="btn btn-primary" onclick="closeCartDrawer()">Continue Shopping</a>
+            </div>
+        </div>
+
+        <div class="cart-drawer-footer">
+            <div class="drawer-subtotal">
+                <span>Subtotal</span>
+                <span id="drawer-subtotal">$0.00</span>
+            </div>
+            <p class="drawer-note">Shipping & taxes calculated at checkout</p>
+            <button class="btn btn-primary btn-large btn-block" onclick="checkout()">
+                Checkout
+            </button>
+            <a href="/cart" class="btn btn-outline btn-block" onclick="closeCartDrawer()">
+                View Cart Page
+            </a>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
